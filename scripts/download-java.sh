@@ -3,7 +3,7 @@
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
-API="https://api.adoptium.net/v3/binary/latest/21/ga/linux/x64/jre/hotspot/normal/eclipse"
+API="https://api.adoptium.net/v3/binary/latest/25/ga/linux/x64/jre/hotspot/normal/eclipse"
 
 if [[ -x "$JAVA_BIN" ]]; then
   log "Java déjà présent : $("$JAVA_BIN" -version 2>&1 | head -1)"
@@ -18,7 +18,7 @@ fi
 TMP_TAR="$(mktemp --suffix=.tar.gz)"
 trap 'rm -f "$TMP_TAR"' EXIT
 
-log "Téléchargement de Temurin JRE 21 (Linux x64)…"
+log "Téléchargement de Temurin JRE 25 (Linux x64)…"
 curl -fSL --retry 3 -o "$TMP_TAR" "$API"
 
 log "Extraction dans $JDK_DIR…"

@@ -8,7 +8,7 @@ Serveur Minecraft Java **Vanilla** (dernière version stable), géré par des sc
 - `sudo` (pour installer le service systemd et `screen`)
 - Connexion Internet (téléchargement de Java + server.jar)
 
-Java n'a **pas** besoin d'être installé : il est téléchargé localement dans `./jdk` (Eclipse Temurin 21).
+Java n'a **pas** besoin d'être installé : il est téléchargé localement dans `./jdk` (Eclipse Temurin 25, requis par les versions récentes de Minecraft).
 
 ## Installation
 
