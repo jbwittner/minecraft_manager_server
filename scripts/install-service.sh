@@ -30,15 +30,17 @@ Description=Minecraft Vanilla Server
 After=network.target
 
 [Service]
-Type=forking
+# Type=simple + 'screen -DmS' : screen reste au premier plan (ne fork pas),
+# systemd suit donc directement le process. On garde l'accès 'screen -r'.
+Type=simple
 User=${RUN_USER}
 WorkingDirectory=${SERVER_DIR}
-ExecStart=${SCREEN_BIN} -dmS ${SCREEN_NAME} ${JAVA_BIN} -Xms${JVM_XMS} -Xmx${JVM_XMX} -jar ${SERVER_JAR} nogui
-ExecStop=${SCREEN_BIN} -p 0 -S ${SCREEN_NAME} -X eval 'stuff "say Arret du serveur dans 5s...\\n"' 'stuff "stop\\n"'
+ExecStart=${SCREEN_BIN} -DmS ${SCREEN_NAME} ${JAVA_BIN} -Xms${JVM_XMS} -Xmx${JVM_XMX} -jar ${SERVER_JAR} nogui
+# Arrêt propre : envoie la commande 'stop' à la console (sauvegarde le monde).
+ExecStop=${SCREEN_BIN} -p 0 -S ${SCREEN_NAME} -X stuff "stop\\r"
 Restart=on-failure
 RestartSec=10
 TimeoutStopSec=90
-SuccessExitStatus=0 1
 
 [Install]
 WantedBy=multi-user.target
