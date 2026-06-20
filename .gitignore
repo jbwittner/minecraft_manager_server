@@ -1,0 +1,14 @@
+# Ignorer le contenu des dossiers de données/runtime, mais garder les dossiers
+# (via leur .gitkeep) sous suivi git.
+
+# Java téléchargé localement
+/jdk/*
+!/jdk/.gitkeep
+
+# Données du serveur (world, jar, logs, config générée…)
+/server/*
+!/server/.gitkeep
+
+# Archives de sauvegarde
+/backups/*
+!/backups/.gitkeep
