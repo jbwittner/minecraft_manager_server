@@ -26,6 +26,7 @@ Le script enchaîne : téléchargement de Java → téléchargement du `server.j
 | Démarrer | `scripts/start.sh` |
 | Arrêter (sauvegarde le monde) | `scripts/stop.sh` |
 | Redémarrer | `scripts/restart.sh` |
+| État du serveur | `scripts/status.sh` |
 | Console interactive | `scripts/console.sh` |
 | Sauvegarde du monde | `scripts/backup.sh` |
 | Logs en direct | `journalctl -u minecraft -f` |
