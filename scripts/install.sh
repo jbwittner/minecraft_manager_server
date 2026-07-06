@@ -55,11 +55,23 @@ gamemode=survival
 server-port=25565
 spawn-protection=16
 enable-command-block=false
+# level-seed vide = monde aléatoire ; définissable via MC_SEED à l'install
+level-seed=
 EOF
+  if [[ -n "${MC_SEED:-}" ]]; then
+    # remplace la ligne level-seed= vide (délimiteur | pour tolérer / dans la seed)
+    sed -i "s|^level-seed=.*|level-seed=${MC_SEED}|" "$SERVER_DIR/server.properties"
+    log "Seed définie : $MC_SEED"
+  fi
   log "server.properties créé."
 else
   log "server.properties existant conservé."
+  [[ -n "${MC_SEED:-}" ]] && warn "MC_SEED ignoré : server.properties existe déjà."
 fi
+
+# Avertit si un monde existe déjà : la seed ne s'appliquera qu'après suppression.
+[[ -n "${MC_SEED:-}" && -d "$SERVER_DIR/world" ]] && \
+  warn "Un monde existe déjà : la seed ne prendra effet qu'après suppression de server/world*."
 
 # 6. Service systemd
 log "== Étape 5/5 : Service systemd =="

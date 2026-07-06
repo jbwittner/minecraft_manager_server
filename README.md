@@ -41,6 +41,11 @@ Le script enchaîne : téléchargement de Java → téléchargement du `server.j
 
 - **RAM** : variables `JVM_XMS` / `JVM_XMX` dans [scripts/common.sh](scripts/common.sh) (défaut `1G` / `2G`). Après modif, relancer `scripts/install-service.sh` puis `scripts/restart.sh`.
 - **Propriétés du serveur** : [server/server.properties](server/server.properties) (puis `scripts/restart.sh`).
+- **Seed du monde** : à l'installation, passer la variable `MC_SEED` :
+  ```bash
+  MC_SEED=12345 scripts/install.sh
+  ```
+  La seed n'agit qu'à la **première génération** du monde. Pour la changer ensuite : éditer `level-seed` dans `server/server.properties` **et supprimer `server/world*`** (le monde n'est pas régénéré automatiquement), puis `scripts/restart.sh`.
 - **Mettre à jour le serveur** : `scripts/download-server.sh` puis `scripts/restart.sh`.
 
 ## Accès réseau
