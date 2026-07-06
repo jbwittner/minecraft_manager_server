@@ -71,6 +71,58 @@ Le serveur écoute sur le port **25565/TCP**.
 - **Réseau local** : les joueurs se connectent à `IP_LOCALE:25565`.
 - **Depuis Internet** : ouvrir/rediriger le port `25565` sur votre box/routeur vers cette machine, et autoriser le port dans le pare-feu (`sudo ufw allow 25565/tcp` si `ufw` est actif).
 
+## Sécurité
+
+Par défaut le serveur est ouvert à tout compte Minecraft légitime. Pour un serveur privé (amis uniquement), suivre ces étapes.
+
+### 1. Whitelist (liste blanche) — recommandé
+
+Seuls les pseudos autorisés peuvent se connecter. Activation via la console (`scripts/console.sh`, `Ctrl-A` `D` pour quitter) :
+
+```
+whitelist on
+whitelist add Pseudo1
+whitelist add Pseudo2
+whitelist list
+whitelist reload
+```
+
+`whitelist on` bascule aussi `white-list=true` (et `enforce-whitelist=true`) dans `server.properties`. Les joueurs déjà connectés non listés sont éjectés au `reload`. Retirer quelqu'un : `whitelist remove Pseudo`.
+
+> Sans console interactive, on peut éditer directement `white-list=true` dans [server/server.properties](server/server.properties) puis `scripts/restart.sh`. Les pseudos vont dans `server/whitelist.json`.
+
+### 2. Comptes authentifiés
+
+Garder **`online-mode=true`** (déjà par défaut) : Mojang/Microsoft vérifie l'identité, bloque les comptes « crackés » et l'usurpation de pseudo. Ne passer à `false` sous **aucun** prétexte sur un serveur exposé à Internet.
+
+### 3. Administrateurs (op)
+
+Donner les droits admin uniquement aux personnes de confiance, via la console :
+
+```
+op VotrePseudo
+deop Pseudo
+```
+
+Régler le niveau de permission dans `server.properties` : `op-permission-level=4` (1–4). Garder `enable-command-block=false` (déjà par défaut) si non nécessaire. `spawn-protection=16` empêche les non-op de modifier la zone de spawn.
+
+### 4. Pare-feu — n'exposer que le port du jeu
+
+```bash
+sudo ufw allow 25565/tcp   # port Minecraft uniquement
+sudo ufw enable
+sudo ufw status
+```
+
+Ne **pas** activer RCON ni ouvrir d'autres ports. Si le serveur reste en réseau local, ne pas rediriger le port sur la box.
+
+### 5. Bonnes pratiques
+
+- **Sauvegardes régulières** : `scripts/backup.sh` (voir aussi l'automatisation via `cron`).
+- **Serveur à jour** : `scripts/download-server.sh` puis `scripts/restart.sh` — corrige les failles connues.
+- **Changer le port** (`server-port`) réduit le bruit des scans automatiques, sans remplacer la whitelist.
+- **`max-players`** bas limite l'impact d'un afflux non désiré.
+
 ## Démarrage automatique
 
 Le service est activé (`systemctl enable minecraft`) : il démarre seul au boot et redémarre automatiquement en cas de crash.
