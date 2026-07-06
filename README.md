@@ -39,7 +39,23 @@ Le script enchaîne : téléchargement de Java → téléchargement du `server.j
 
 ## Configuration
 
-- **RAM** : variables `JVM_XMS` / `JVM_XMX` dans [scripts/common.sh](scripts/common.sh) (défaut `1G` / `2G`). Après modif, relancer `scripts/install-service.sh` puis `scripts/restart.sh`.
+- **RAM** : variables `JVM_XMS` (mémoire initiale) / `JVM_XMX` (mémoire max) dans [scripts/common.sh](scripts/common.sh) (défaut `1G` / `2G`). Éditer les valeurs, par exemple :
+  ```bash
+  JVM_XMS="2G"
+  JVM_XMX="4G"
+  ```
+  Suffixes acceptés : `M` (Mo) ou `G` (Go) — ex. `512M`, `3G`. Après modif, relancer `scripts/install-service.sh` puis `scripts/restart.sh`.
+
+  **Comment calculer** : `JVM_XMX` = RAM totale − réserve OS (~1 à 1,5 Go). Régler `JVM_XMS = JVM_XMX` (recommandé pour Minecraft : évite le redimensionnement du tas). RAM totale : `free -h` (colonne `total`).
+
+  | RAM machine | XMS = XMX conseillé |
+  |-------------|---------------------|
+  | 2 Go        | `1G`                |
+  | 4 Go        | `2G` à `3G`         |
+  | 8 Go        | `6G`                |
+  | 16 Go       | `12G` à `14G`       |
+
+  Ne pas allouer toute la RAM : l'OS, `screen` et le cache disque en ont besoin. Trop d'`Xmx` → OOM killer tue le serveur.
 - **Propriétés du serveur** : [server/server.properties](server/server.properties) (puis `scripts/restart.sh`).
 - **Seed du monde** : à l'installation, passer la variable `MC_SEED` :
   ```bash
